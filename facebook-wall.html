@@ -97,7 +97,7 @@
         width: 80%;
         margin:0 auto;
         display: block
-        /*max-height: 30px;*/
+          /*max-height: 30px;*/
       }
       .postLikes > p {
         font-size: 12px;
@@ -308,7 +308,7 @@
                     <img class="photo-source" src="{{item.picture}}">
                   </template>
                 </template>
-                
+
               </div>
 
               <!-- Likes, comments and shares -->
@@ -456,6 +456,7 @@ access_token={{access_token}}&summary=true -->
         var exp = new RegExp(pattern);  
         var result = exp.exec(fullUrl)
         var url = result && result.length >1 ? result[1] : ""
+        var id;
         url = url.replace(/%2F/g,"/");
         url =  url.replace(/%3A/g,":");
         url =  url.replace(/%3F/g,"?");
@@ -467,6 +468,13 @@ access_token={{access_token}}&summary=true -->
         }
         if (url.indexOf("www.facebook.com") > -1 ) {
           url += "&access_token=" + this.access_token;
+        }
+        if (item.linked && item.linked.id && item.linked.status_type === 'added_photos')  {
+          id = item.linked.id.split('_')[1];
+          url = 'https://graph.facebook.com/' + id + '/picture?access_token=' + this.access_token;
+        } else if (item.id && item.status_type === 'added_photos'){
+          id = item.id.split('_')[1];
+          url = 'https://graph.facebook.com/' + id + '/picture?access_token=' + this.access_token;
         }
         return url;
       },
@@ -628,7 +636,10 @@ access_token={{access_token}}&summary=true -->
           if (list[i].name == list[i+1].from.name) {
             this.set("events." + i + ".linked", list[i+1])
             this.splice("events", i+1, 1);
-          } 
+          } else if (list[i].picture === list[i+1].picture) {
+            this.set("events." + i + ".linked", list[i+1])
+            this.splice("events", i+1, 1);
+          }
           if (list[i].message) {
             this.set("events." + i + ".message", list[i].message.replace(/(?:\r\n|\r|\n)/g, "<br>"));
             this.set("events." + i + ".message", this._parseText(list[i].message));
