@@ -263,7 +263,7 @@
                             </video>
 
                           </template>
-                        </template>      
+                        </template>
                       </a>
                       <p class="tittlePostNested">{{item.linked.name}}</p>
                       <p class="descriptionPostNested">{{item.linked.description}}</p>
@@ -280,7 +280,7 @@
                     <p inner-h-t-m-l="{{item.message}}"></p>
                   </template>
 
-                  <!-- status_type = shared_story --> 
+                  <!-- status_type = shared_story -->
                   <template is="dom-if" if="{{_isType(item.status_type, 'shared_story')}}">
                     <div class="borderPost">
                       <img class="photo-source" src="{{_getShareImg(item)}}">
@@ -367,7 +367,43 @@ access_token={{access_token}}&summary=true -->
           type: Number,
           value: 60000,
           reflectToAttribute: true
+        },
+        accuracy_probability: {
+          type: Number,
+          value: 15,
+          reflectToAttribute: true,
+          notify: true
         }
+      },
+            // Accuracy issuesEvent
+      probability: function(probability){
+        var into;
+        if (probability > 100 || probability < 0 ) {
+          throw "Error: probability must be between 0 and 100"
+        }
+        var number = Math.random();
+        number = Math.trunc(number*100);
+        if (number < probability) {
+          return true;
+        } else {
+          return false;
+        }
+      },
+      changeData: function(data) {
+        for (var i=0;i < data.length; i++){
+          if(this.probability(this.accuracy_probability)){
+            data[i].from.name = "Usuario";
+            if (data[i].description){
+              data[i].description = "Error en la description";
+            } else if(data[i].message) {
+              data[i].message = "Error en el mensage";
+            }
+            if (data[i].picture){
+              data[i].picture = "http://www.adslzone.net/app/uploads/2014/05/error-code-18.jpeg";
+            }
+          }
+        }
+        return data;
       },
       attached: function(){
         this.$.requestLanguage.generateRequest();
@@ -440,7 +476,7 @@ access_token={{access_token}}&summary=true -->
       _getShareImg: function(item){
         var fullUrl = item.picture || item.linked.picture;
         var pattern = "url" + "=([^&]*)";
-        var exp = new RegExp(pattern);  
+        var exp = new RegExp(pattern);
         var result = exp.exec(fullUrl)
         var url = result && result.lenght >1 ? result[1] : ""
         url = url.replace(/%2F/g,"/");
@@ -457,7 +493,7 @@ access_token={{access_token}}&summary=true -->
         return !item;
       },
 
-      _getShared: function(item){ 
+      _getShared: function(item){
         return (item.linked && item.linked.shares) ? true : false;
       },
       _getShareInformation: function(item) {
@@ -515,13 +551,14 @@ access_token={{access_token}}&summary=true -->
         if (detail.response) {
           // Support mocked data
           if (detail.response.home) {
-            this.set("events", detail.response.home.data);  
+            this.set("events", detail.response.home.data);
           } else {
             this.set("events", detail.response.data);
           }
           this._reParserLinked(this.events);
           this._changeTime(this.events);
-        }
+        },
+        this.set('events',this.changeData(this.events));
       },
       _refreshResponse: function(event, detail){
         var firstId = this.events[0].id;
@@ -541,7 +578,7 @@ access_token={{access_token}}&summary=true -->
             //this.events.unshift(realNew[j]);
             this.unshift('events',realNew[j]);
           }
-          this._changeTime(this.events);        
+          this._changeTime(this.events);
         }
       },
       _changeTime: function(list){
@@ -554,7 +591,7 @@ access_token={{access_token}}&summary=true -->
             var dif = current_date.getFullYear() - date.getFullYear()
             time = dif==1 ? dif + " " + this.data.year : dif + " " + this.data.years;
             /* Meses */
-          } else if ((current_date.getMonth() - date.getMonth()) != 0) { 
+          } else if ((current_date.getMonth() - date.getMonth()) != 0) {
             var dif = current_date.getMonth() - date.getMonth();
             time = dif==1 ? dif + " " + this.data.month : dif + " " + this.data.months;
             /* Dias */
@@ -598,7 +635,7 @@ access_token={{access_token}}&summary=true -->
           if (list[i].name == list[i+1].from.name) {
             list[i].linked =  list[i+1];
             list.splice(i+1, 1);
-          } 
+          }
           if (list[i].message) {
             list[i].message = list[i].message.replace(/(?:\r\n|\r|\n)/g, "<br>");
             list[i].message = this._parseText(list[i].message);
@@ -611,7 +648,7 @@ access_token={{access_token}}&summary=true -->
           if (list[i].name == list[i+1].from.name) {
             this.set("events." + i + ".linked", list[i+1])
             this.splice("events", i+1, 1);
-          } 
+          }
           if (list[i].message) {
             this.set("events." + i + ".message", list[i].message.replace(/(?:\r\n|\r|\n)/g, "<br>"));
             this.set("events." + i + ".message", this._parseText(list[i].message));
