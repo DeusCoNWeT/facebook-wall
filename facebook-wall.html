@@ -349,21 +349,16 @@
             },
             languageUrl: {
                 type: String,
-                computed: "_getLanguageUrl(component_directory, idiom)"
+                computed: "_getLanguageUrl(idiom)"
             },
             requestDataUrl: {
                 type: String,
-                computed: "_getRequestDataUrl(component_directory, access_token)"
+                computed: "_getRequestDataUrl(access_token)"
             },
             access_token: {
                 type: String,
                 value: "",
                 refrectToAttribute: true
-            },
-            component_directory: {
-                type: String,
-                value: "",
-                reflectToAttribute: true
             },
             refreshTime: {
                 type: Number,
@@ -407,16 +402,13 @@
                 this.idiom = "es_es.json"
 
             }
-            if (this.component_directory || this.component_directory == "") {
-                this.$.requestLanguage.generateRequest();
-            }
+            this.$.requestLanguage.generateRequest();
         },
-        _getLanguageUrl: function (component_directory, idiom) {
-            return component_directory + "language/" + idiom;
+        _getLanguageUrl: function (idiom) {
+            return this.resolveUrl("language/" + idiom);
         },
 
-        _getRequestDataUrl: function (component_directory, access_token) {
-            /*return component_directory + "mockData/mockData.json";*/
+        _getRequestDataUrl: function (access_token) {
             return "https://graph.facebook.com/v2.3/me?fields=home&pretty=1&access_token=" + access_token;
         },
 
