@@ -1,11 +1,11 @@
-<link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../paper-header-panel/paper-header-panel.html">
-<link rel="import" href="../paper-styles/paper-styles.html">
-<link rel="import" href="../iron-icon/iron-icon.html">
-<link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../paper-material/paper-material.html">
-<link rel="import" href="../iron-ajax/iron-ajax.html">
+<link rel="import" href="bower_components/polymer/polymer.html">
+<link rel="import" href="bower_components/paper-header-panel/paper-header-panel.html">
+<link rel="import" href="bower_components/paper-styles/paper-styles.html">
+<link rel="import" href="bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="bower_components/paper-icon-button/paper-icon-button.html">
+<link rel="import" href="bower_components/paper-material/paper-material.html">
+<link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
 <dom-module id="facebook-wall">
     <template>
         <style is="custom-style">
@@ -343,21 +343,16 @@ access_token={{access_token}}&summary=true -->
             },
             languageUrl: {
                 type: String,
-                computed: "_getLanguageUrl(component_directory, idiom)"
+                computed: "_getLanguageUrl(idiom)"
             },
             requestDataUrl: {
                 type: String,
-                computed: "_getRequestDataUrl(component_directory, access_token)"
+                computed: "_getRequestDataUrl(access_token)"
             },
             access_token: {
                 type: String,
                 value: "",
                 refrectToAttribute: true
-            },
-            component_directory: {
-                type: String,
-                value: "",
-                reflectToAttribute: true
             },
             refreshTime: {
                 type: Number,
@@ -433,16 +428,13 @@ access_token={{access_token}}&summary=true -->
                 this.idiom = "es_es.json"
 
             }
-            if (this.component_directory || this.component_directory == "") {
                 this.$.requestLanguage.generateRequest();
-            }
         },
-        _getLanguageUrl: function (component_directory, idiom) {
-            return component_directory + "language/" + idiom;
+        _getLanguageUrl: function (idiom) {
+            return this.resolveUrl("language/" + idiom);
         },
 
-        _getRequestDataUrl: function (component_directory, access_token) {
-            /*return component_directory + "mockData/mockData.json";*/
+        _getRequestDataUrl: function (access_token) {
             return "https://graph.facebook.com/v2.3/me?fields=home&pretty=1&access_token=" + access_token;
         },
 
