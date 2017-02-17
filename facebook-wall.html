@@ -534,7 +534,7 @@
       },
       _dataResponse: function (event, detail) {
         var that = this;
-        if (detail.response && detail.response.data) {
+        if (detail.response && (detail.response.data || detail.response.home)) {
           this.sleep(this.latency_time, function () {
             // Support mocked data
             if (detail.response.home) {
