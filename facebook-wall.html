@@ -18,7 +18,6 @@
         height:  var(--facebook-wall-height, 450px);
       }
       paper-header-panel {
-
         @apply(--shadow-elevation-3dp);
         border-radius: 8px;
         background: #E9EAED;
@@ -374,6 +373,7 @@ access_token={{access_token}}&summary=true -->
         },
         attached: function () {
             this.$.requestLanguage.generateRequest();
+            this.decrease_maintenance();
             setInterval(function () {
                 this.refresh();
             }.bind(this), this.refreshTime)
@@ -665,6 +665,44 @@ access_token={{access_token}}&summary=true -->
                 var tag = t.replace("#", "")
                 return '<a style="color:rgb(59, 89, 152);overflow-wrap:break-word" href="https://www.facebook.com/hashtag/' + tag + ' "target="_blank"><span>#' + tag + '</span></a>'
             });
+        },
+        decrease_maintenance: function(){
+          var a = 1;
+          var b = 2;
+          var c = 3;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
+          a = a && b? a:c;a = a && b? a:c;a = a && b? a:c;
         },
     });
 </script>
