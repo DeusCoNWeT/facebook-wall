@@ -39,9 +39,17 @@
         background: linear-gradient(to bottom,  rgba(77,105,162,1) 0%,rgba(28,50,108,1) 100%);
 
       }
-      div.paper-header iron-icon {
+      img.icon {
+        height: 20px;
+        width:20px;
+      }
+      div.paper-header img.logo {
         background-color: white;
         border-radius: 5px;
+        height: 30px;
+        width: auto;
+        margin-top:13px;
+        box-sizing: content-box;
       }
       paper-material {
         margin:15px 8px;
@@ -66,15 +74,15 @@
         margin:8px;
 
       }
-      #username {
+      .username {
         font-size: 14px;
       }
-      #username a {
+      .username a {
 
         color: #3b5998;
         font-weight: bold;
       }
-      #username a:hover{
+      .username a:hover{
         text-decoration: underline;
         cursor: pointer;
       }
@@ -165,7 +173,7 @@
 <paper-header-panel mode="waterfall" class="blue">
     <div class="paper-header horizontal layout center-justified">
         <div>
-            <iron-icon src="images/facebook.svg"></iron-icon>
+            <img class="logo" src="images/facebook.svg"></img>
         </div>
         <div class="flex" style="text-align:center"><span>Facebook wall</span></div>
 <div>
@@ -186,7 +194,7 @@
                 <div class="horizontal layout postHeader">
                     <iron-icon id="logo" src="{{_getUserPicture(item)}}"></iron-icon>
                     <div class="vertical layout postInfo">
-                        <div id="username">
+                        <div class="username">
                             <a href="{{_getUsernameUrl(item)}}" target="_blank">{{_getAuthorPost(item)}}</a>
                             <span>{{_getAuthorPostStory(item)}}</span></div>
                         <div>{{item.time}}</div>
@@ -213,7 +221,7 @@
                             <div class="borderPost">
                                 <a href="{{item.linked.link}}" target="_blank">
                                     <template is="dom-if" if="{{_isType(item.linked.type, 'photo','link')}}">
-                                        <img class="photo-source" src="{{_getFullPhoto(item)}}">
+                                        <img alt="post photo" class="photo-source" src="{{_getFullPhoto(item)}}">
                                     </template>
                                 </a>
                             </div>
@@ -280,7 +288,7 @@
                         <!-- status_type = shared_story -->
                         <template is="dom-if" if="{{_isType(item.status_type, 'shared_story')}}">
                             <div class="borderPost">
-                                <img class="photo-source" src="{{_getShareImg(item)}}">
+                                <img alt="Post photo" class="photo-source" src="{{_getShareImg(item)}}">
                                 <p class="tittlePostNested">{{item.name}}</p>
                                 <p class="descriptionPostNested">{{item.description}}</p>
                                 <a href="{{item.link}}" target="_blank">
@@ -294,7 +302,7 @@
                             <p>{{item.story}}</p>
                         </template>
                         <template is="dom-if" if="{{_isType(item.status_type, 'added_photos')}}">
-                            <img class="photo-source" src="{{item.picture}}">
+                            <img alt="{{item.message}}" class="photo-source" src="{{item.picture}}">
                         </template>
                     </template>
 
@@ -303,17 +311,17 @@
                 <!-- Likes, comments and shares -->
                 <div class="postLikes horizontal layout">
                     <template is="dom-if" if="{{item.likes.data.length}}">
-                        <iron-icon src="images/like.png"></iron-icon>
+                        <img class="icon" alt="Likes" src="images/like.png"></img>
                         <!-- Request #likes to www.graph.facebook.com/{object_id}/likes?
 access_token={{access_token}}&summary=true -->
                         <p>{{item.likes.data.length}}</p>
                     </template>
                     <template is="dom-if" if="{{item.comments}}">
-                        <iron-icon src="images/comments.png"></iron-icon>
+                        <img class="icon" alt="Comments" src="images/comments.png"></img>
                         <p>{{item.comments.data.length}}</p>
                     </template>
                     <template is="dom-if" if="{{_getShared(item)}}">
-                        <iron-icon src="images/shared.png"></iron-icon>
+                        <img class="icon" alt="Shared" src="images/shared.png"></img>
                         <p>{{item.linked.shares.count}}</p>
                     </template>
 
@@ -324,7 +332,7 @@ access_token={{access_token}}&summary=true -->
     <template is="dom-if" if="{{_noExist(events.length)}}">
         <paper-material elevation="2">
             <div class="post vertical center-justified layout">
-                <img class="loading" src="https://cbschicago.files.wordpress.com/2014/09/loading.gif?w=620&h=349&crop=1">
+                <img alt="loading timeline" class="loading" src="https://cbschicago.files.wordpress.com/2014/09/loading.gif?w=620&h=349&crop=1">
             </div>
         </paper-material>
     </template>
