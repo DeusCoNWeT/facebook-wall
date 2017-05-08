@@ -445,7 +445,8 @@ access_token={{access_token}}&summary=true -->
             return item.linked && item.linked.story ? item.linked.story.replace(author, "") : "";
         },
         _getShareImg: function (item) {
-            var fullUrl = item.picture || item.linked.picture;
+            var fullUrl = item.linked ? item.linked.picture : item.picture;
+            console.log(item);
             var pattern = "url" + "=([^&]*)";
             var exp = new RegExp(pattern);
             var result = exp.exec(fullUrl)
@@ -470,7 +471,7 @@ access_token={{access_token}}&summary=true -->
                 id = item.id.split('_')[1];
                 url = 'https://graph.facebook.com/' + id + '/picture?access_token=' + this.access_token;
             }
-            return url;
+            return url || fullUrl;
         },
         _noExist: function (item) {
             return !item;
