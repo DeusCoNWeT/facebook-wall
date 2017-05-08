@@ -1,9 +1,9 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-header-panel/paper-header-panel.html">
 <link rel="import" href="../paper-styles/paper-styles.html">
+<link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
-<link rel="import" href="../paper-icon-button/paper-icon-button.html">
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <dom-module id="facebook-wall">
@@ -18,10 +18,9 @@
         height:  var(--facebook-wall-height, 450px);
       }
       paper-header-panel {
-
-        @apply(--shadow-elevation-3dp);
         border-radius: 8px;
         background: #E9EAED;
+        @apply(--shadow-elevation-3dp);
       }
       div.paper-header {
         height: 60px;
@@ -46,9 +45,9 @@
       div.paper-header img.logo {
         background-color: white;
         border-radius: 5px;
-        height: 30px;
-        width: auto;
-        margin-top:13px;
+        height: 24px;
+        width: 24px;
+        margin-top:18px;
         box-sizing: content-box;
       }
       paper-material {
@@ -60,7 +59,7 @@
         border-radius: 3px;
         background-color:white;
       }
-      #logo {
+      .userPicture {
         margin:8px;
         min-width: 40px;
         min-height: 40px;
@@ -111,7 +110,7 @@
         font-size: 12px;
         margin: auto 8px auto 1px;
       }
-      .postLikes > iron-icon {
+      .postLikes > img {
         width: 18px;
         height: 18px;
         margin: auto 2px;
@@ -133,7 +132,7 @@
         text-transform: uppercase;
         margin:10px 8px;
         font-size: 8px;
-        color: #9197a3;
+        color: #707682;
       }
       .pageStyle {
         padding-bottom: 1px;
@@ -173,11 +172,11 @@
 <paper-header-panel mode="waterfall" class="blue">
     <div class="paper-header horizontal layout center-justified">
         <div>
-            <img class="logo" src="images/facebook.svg"></img>
+            <img alt="Facebook logo"class="logo" src="images/facebook.svg"></img>
         </div>
         <div class="flex" style="text-align:center"><span>Facebook wall</span></div>
 <div>
-    <paper-icon-button icon="refresh" on-click="refresh"></paper-icon-button>
+    <paper-icon-button  title="refresh timeline" alt="refresh" icon="refresh" on-click="refresh"></paper-icon-button>
 </div>
 
 </div>
@@ -192,7 +191,7 @@
                     <div class="reactedTo" inner-h-t-m-l="{{_getShareInformation(item)}}"></div>
                 </template>
                 <div class="horizontal layout postHeader">
-                    <iron-icon id="logo" src="{{_getUserPicture(item)}}"></iron-icon>
+                    <img alt="User picture" class="userPicture" src="{{_getUserPicture(item)}}"></img>
                     <div class="vertical layout postInfo">
                         <div class="username">
                             <a href="{{_getUsernameUrl(item)}}" target="_blank">{{_getAuthorPost(item)}}</a>
@@ -238,7 +237,7 @@
                         <!-- added video-->
                         <template is="dom-if" if="{{_isType(item.linked.status_type, 'added_video')}}">
                             <p class="">{{item.message}}</p>
-                            <video class="photo-source" controls>
+                            <video alt="Video linked" class="photo-source" controls>
                                 <source src="{{item.source}}" />
                             </video>
                         </template>
@@ -250,7 +249,7 @@
                                 <a href="{{item.linked.link}}" target="_blank">
                                     <!-- its a photo or link type-->
                                     <template is="dom-if" if="{{_isType(item.linked.type, 'photo', 'link')}}">
-                                        <img class="photo-source" src="{{_getShareImg(item)}}">
+                                        <img alt="Photo linked" class="photo-source" src="{{_getShareImg(item)}}">
                                     </template>
                                     <!-- its a video -->
                                     <template is="dom-if" if="{{_isType(item.linked.type, 'video')}}">
