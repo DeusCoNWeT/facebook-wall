@@ -7,6 +7,8 @@
 <link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
 <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+<link href="https://www.piliapp.com/assets/us2/v2/e9asa8aw2y/1lafj.css" rel="stylesheet">
+
 <script src="../moment/min/moment.min.js"></script>
 <script src="../moment/locale/es.js"></script>
 <dom-module id="facebook-wall">
@@ -176,11 +178,38 @@
                 height: 50%;
                 margin: auto auto;
             }
-            .test{
-                color:red !important;
+            .photo{
+                max-width: 100%;
+                margin:15px auto;
+                max-height: 100%;
+                display: block;
+            }
+            .emoji {
+                background-image: url("https://assets-us2.piliapp.com/s3pxy/emoji/sprite/fbv7-20170217.min.png");
+                display: inline-block;
+                margin:0 -4px;
+                position: relative;
+                top:5px;
+                transform: scale(0.65);
+                width: 24px;
+                height: 24px;
+            }
+            .postLikes {
+                margin-top:15px;
+            }
+            .link {
+                color:rgb(59, 89, 152);
+                text-decoration:none;
+                overflow-wrap:break-word
+            }
+            .link:hover{
+                text-decoration: underline;
+            }
+            .link.bold {
+                font-weight: bold;
             }
         </style>
-        <iron-ajax id="requestData" url="https://graph.facebook.com/v2.3/me?feed?fields=attachments,story_tags,place,from,icon,message,object_id,source,story,type,update_time&pretty=1&access_token={{access_token}}" headers="{'Timing-Allow-origin': '*'}" method="GET" handleAs="json"
+        <iron-ajax id="requestData" url="https://graph.facebook.com/v2.10/me/feed?fields=attachments,story_tags,place,from,icon,message,object_id,likes,source,story,type&access_token={{access_token}}&locale={{locale}}" headers="{'Timing-Allow-origin': '*'}" method="GET" handleAs="json"
             on-response="_dataResponse" on-error="_loadMock">
         </iron-ajax>
         <iron-ajax id="requestMock" url="{{mockUrl}}" method="GET" handleAs="json" on-response="_dataResponse">
@@ -220,6 +249,15 @@
                             <!-- Post content -->
                             <div class="postContent">
                                 <div inner-h-t-m-l="{{_parseText(item.message)}}"></div>
+                                <template is="dom-if" if="{{item.attachments.data}}">
+                                    <template is="dom-if" if="{{item.attachments.data.0.media}}">
+                                        <img class="photo" src="{{item.attachments.data.0.media.image.src}}">
+                                    </template>
+                                    <template is="dom-if" if="{{item.attachments.data.0.subattachments}}">
+                                        <img class="photo" src="{{item.attachments.data.0.subattachments.data.0.media.image.src}}">
+                                    </template>
+                                </template>
+                            
                                 
                             </div>
 
@@ -268,6 +306,11 @@
                     observer: "_languageUpdate",
                     refrectToAttribute: true
                 },
+                locale: {
+                    type: String,
+                    computed: "_getLocate(language)",
+                     
+                },
                 access_token: {
                     type: String,
                     value: "",
@@ -301,7 +344,13 @@
 							moment.locale(newValue);
 							this.refresh()
             },
-
+            _getLocate: function(language){
+                if (language == "es"){
+                    return "es_es";
+                } else {
+                    return "en_US";
+                }
+            },
 						// Reload data when access token change
             _checkAccessToken: function (newValue) {
                 if (newValue) {
@@ -478,30 +527,44 @@
                 return list;
             },
             _parserUser: function (user) {
-                var tag = "<a class='test' style='color:rgb(59, 89, 152);font-weight:bold;text-decoration:none;overflow-wrap:break-word' href='https://www.facebook.com/" + user.id + "' target='_blank'>" + user.name + "</a>";
+                var tag = "<a class='facebook-wall scope-style link bold' href='https://www.facebook.com/" + user.id + "' target='_blank'>" + user.name + "</a>";
                 return tag;
             },
             _parsePageUrl: function (page) {
-                var tag = "<a class='test' style='color:rgb(59, 89, 152);font-weight:bold;text-decoration:none;overflow-wrap:break-word' href='http://facebook.com/pages/-/" + page.id + "' target='_blank'>" + page.name + "</a>";
+                var tag = "<a class='facebook-wall scope-style link bold' href='http://facebook.com/pages/-/" + page.id + "' target='_blank'>" + page.name + "</a>";
                 return tag
             },
             _parseText: function (text) {
                 if (text) {
                     text = this._parseURL(text);
                     text = this._parseHashtag(text);
+                    text = this._parseEmojis(text);
                 }
                 return text ? text : "";
             },
             _parseURL: function (text) {
                 return text.replace(/(?:http|https)+:\/\/[A-Za-z0-9-_]+\.[A-Za-z0-9-_:%&~\?\/.=#]+/g, function (url) {
                     url = url.replace("#", "%23");
-                    return '<a style="color:rgb(59, 89, 152);overflow-wrap:break-word" href=' + url + ' target="_blank">' + url + '</a>'
+                    return '<a class="facebook-wall scope-style link" href=' + url + ' target="_blank">' + url + '</a>'
                 })
             },
             _parseHashtag: function (text) {
                 return text.replace(/[#]+[A-Za-z0-9-_ñáéíóúàèìòùç]+/g, function (t) {
                     var tag = t.replace("#", "")
-                    return '<a style="color:rgb(59, 89, 152);overflow-wrap:break-word" href="https://www.facebook.com/hashtag/' + tag + ' "target="_blank"><span>#' + tag + '</span></a>'
+                    return '<a class="facebook-wall scope-style link" href="https://www.facebook.com/hashtag/' + tag + ' "target="_blank"><span>#' + tag + '</span></a>'
+                });
+            },
+            _parseEmojis: function(text){
+                var ranges = [
+                    '\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
+                    '\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
+                    '\ud83d[\ude80-\udeff]',
+                    '❤️'  // U+1F680 to U+1F6FF
+                ];
+                var regex= new RegExp(ranges.join('|'), 'g');
+                return text.replace(regex, function(emoji){
+                    var code = emoji.codePointAt(0).toString(16)
+                    return "<span class='facebook-wall scope-style emoji emoji" + code + "'></span>"
                 });
             },
             _getLocation: function(item){
