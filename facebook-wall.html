@@ -1,20 +1,18 @@
 <link rel="import" href="../polymer/polymer.html">
 <link rel="import" href="../paper-header-panel/paper-header-panel.html">
-<link rel="import" href="../paper-styles/paper-styles.html">
 <link rel="import" href="../iron-icon/iron-icon.html">
 <link rel="import" href="../iron-icons/iron-icons.html">
 <link rel="import" href="../paper-icon-button/paper-icon-button.html">
-<link rel="import" href="../paper-material/paper-material.html">
 <link rel="import" href="../iron-ajax/iron-ajax.html">
-<link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-<link href="https://www.piliapp.com/assets/us2/v2/e9asa8aw2y/1lafj.css" rel="stylesheet">
+<link rel="import" href="facebook-style.html">
+
 
 <script src="../moment/min/moment.min.js"></script>
 <script src="../moment/locale/es.js"></script>
 <dom-module id="facebook-wall">
     <template>
-        <style is="custom-style">
-             :host {
+        <style is="custom-style" include="facebook-style">
+            :host {
                 font-family: helvetica, arial, sans-serif;
                 color: black;
                 min-width: 300px;
@@ -23,194 +21,9 @@
                 height: var(--facebook-wall-height, 450px);
             }
 
-            paper-header-panel {
-
-                @apply(--shadow-elevation-3dp);
-                border-radius: 8px;
-                background: #E9EAED;
-            }
-
-            div.paper-header {
-                height: 60px;
-                font-size: 16px;
-                width: var(--facebook-wall-width);
-                line-height: 60px;
-                padding: 0 10px;
-                color: white;
-                transition: height 0.2s;
-                border-top-left-radius: 8px;
-                border-top-right-radius: 8px;
-            }
-
-            div.paper-header {
-                background: rgb(77, 105, 162);
-                background: linear-gradient(to bottom, rgba(77, 105, 162, 1) 0%, rgba(28, 50, 108, 1) 100%);
-            }
-
-            div.paper-header iron-icon {
-                background-color: white;
-                border-radius: 5px;
-            }
-
-            paper-material {
-                margin: 15px 8px;
-            }
-
-            .post {
-                min-height: 100px;
-                padding: 8px;
-                border-radius: 3px;
-                background-color: white;
-            }
-
-            #logo {
-                margin: 8px;
-                min-width: 40px;
-                min-height: 40px;
-            }
-
-
-            .postInfo {
-                font-size: 10px;
-                margin: 8px;
-            }
-
-            #username {
-                font-size: 14px;
-            }
-
-            #username a {
-
-                color: #3b5998;
-                font-weight: bold;
-            }
-
-            #username a:hover {
-                text-decoration: underline;
-                cursor: pointer;
-            }
-
-            .postContent {
-                border-top: 1px solid #e6e6e6;
-                padding-top: 8px;
-                font-size: 13px;
-            }
-
-            a {
-                text-decoration: none;
-                color: inherit;
-            }
-
-            .reactedTo {
-                font-size: 12px;
-                border-bottom: 1px solid #e6e6e6;
-                padding-bottom: 8px;
-            }
-
-            .photo-source {
-                width: 80%;
-                margin: 0 auto;
-                display: block
-                /*max-height: 30px;*/
-            }
-
-            .postLikes>p {
-                font-size: 12px;
-                margin: auto 8px auto 1px;
-            }
-
-            .postLikes>iron-icon {
-                width: 18px;
-                height: 18px;
-                margin: auto 2px;
-            }
-
-            .borderPost {
-                border: 1px solid #e6e6e6;
-                margin: 5px auto;
-            }
-
-            .tittlePostNested {
-                font-size: 12px;
-                font-weight: bold;
-                margin: 10px 5px;
-            }
-
-            .descriptionPostNested {
-                font-size: 10px;
-                margin: 10px 8px;
-            }
-
-            .authorPostNested {
-                text-transform: uppercase;
-                margin: 10px 8px;
-                font-size: 8px;
-                color: #9197a3;
-            }
-
-            .pageStyle {
-                padding-bottom: 1px;
-                margin-bottom: 5px;
-                border-left: 2px solid #ccc;
-            }
-
-            .sharedStory {
-                margin: 10px 5px;
-                font-size: 10px;
-            }
-
-            .sharedDescription {
-                border-left: 2px dotted #ccc;
-                padding-left: 12px;
-                margin-left: 10px;
-            }
-
-            p {
-                margin: 8px 3px;
-            }
-
-            .singleSharedDescription {
-                margin: 10px 5px;
-            }
-
-            .loading {
-                width: 50%;
-                height: 50%;
-                margin: auto auto;
-            }
-            .photo{
-                max-width: 100%;
-                margin:15px auto;
-                max-height: 100%;
-                display: block;
-            }
-            .emoji {
-                background-image: url("https://assets-us2.piliapp.com/s3pxy/emoji/sprite/fbv7-20170217.min.png");
-                display: inline-block;
-                margin:0 -4px;
-                position: relative;
-                top:5px;
-                transform: scale(0.65);
-                width: 24px;
-                height: 24px;
-            }
-            .postLikes {
-                margin-top:15px;
-            }
-            .link {
-                color:rgb(59, 89, 152);
-                text-decoration:none;
-                overflow-wrap:break-word
-            }
-            .link:hover{
-                text-decoration: underline;
-            }
-            .link.bold {
-                font-weight: bold;
-            }
         </style>
-        <iron-ajax id="requestData" url="https://graph.facebook.com/v2.10/me/feed?fields=attachments,story_tags,place,from,icon,message,object_id,likes,source,story,type&access_token={{access_token}}&locale={{locale}}" headers="{'Timing-Allow-origin': '*'}" method="GET" handleAs="json"
-            on-response="_dataResponse" on-error="_loadMock">
+        <iron-ajax id="requestData" url="https://graph.facebook.com/v2.10/me/feed?fields=name,updated_time,attachments,story_tags,place,from,icon,message,object_id,likes,source,story,type&access_token={{access_token}}&locale={{locale}}"
+            headers="{'Timing-Allow-origin': '*'}" method="GET" handleAs="json" on-response="_dataResponse" on-error="_loadMock">
         </iron-ajax>
         <iron-ajax id="requestMock" url="{{mockUrl}}" method="GET" handleAs="json" on-response="_dataResponse">
         </iron-ajax>
@@ -219,7 +32,9 @@
                 <div>
                     <iron-icon src="images/facebook.svg"></iron-icon>
                 </div>
-                <div class="flex" style="text-align:center"><span>Facebook wall</span></div>
+                <div class="flex" style="text-align:center">
+                    <span>Facebook wall</span>
+                </div>
                 <div>
                     <paper-icon-button icon="refresh" on-click="refresh"></paper-icon-button>
                 </div>
@@ -240,7 +55,8 @@
                                 <div class="vertical layout postInfo">
                                     <div id="username">
                                         <a href="{{_getUsernameUrl(item)}}" target="_blank">{{_getAuthorPost(item)}}</a>
-                                        <span>{{_getAuthorPostStory(item)}}</span></div>
+                                        <span>{{_getAuthorPostStory(item)}}</span>
+                                    </div>
                                     <div>{{getTime(item.updated_time)}}{{_getLocation(item)}}</div>
                                 </div>
                             </div>
@@ -248,17 +64,63 @@
 
                             <!-- Post content -->
                             <div class="postContent">
-                                <div inner-h-t-m-l="{{_parseText(item.message)}}"></div>
-                                <template is="dom-if" if="{{item.attachments.data}}">
-                                    <template is="dom-if" if="{{item.attachments.data.0.media}}">
-                                        <img class="photo" src="{{item.attachments.data.0.media.image.src}}">
+                                <template is="dom-if" if="{{item.message}}">
+                                    <div class="description" inner-h-t-m-l="{{_parseText(item.message)}}"></div>
+                                </template>
+                                <!-- PHOTOS -->
+                                <template is="dom-if" if="{{_isType(item.type,  'photo')}}">
+                                    <template is="dom-if" if="{{item.attachments.data}}">
+
+                                        <template is="dom-if" if="{{item.attachments.data.0.media}}">
+                                            <img class="photo" src="{{item.attachments.data.0.media.image.src}}">
+                                        </template>
+                                        <template is="dom-if" if="{{item.attachments.data.0.subattachments}}">
+                                            <img class="photo" src="{{item.attachments.data.0.subattachments.data.0.media.image.src}}">
+                                        </template>
                                     </template>
-                                    <template is="dom-if" if="{{item.attachments.data.0.subattachments}}">
-                                        <img class="photo" src="{{item.attachments.data.0.subattachments.data.0.media.image.src}}">
+
+                                </template>
+
+                                <!-- VIDEOS -->
+                                <template is="dom-if" if="{{_isType(item.type, 'video')}}">
+                                    <template is="dom-if" if="{{item.attachments.data}}">
+                                        <div class="video-content horizontal layout">
+                                            <template is="dom-if" if="{{item.attachments.data.0.media}}">
+                                                <a class="video-photo" href="{{item.attachments.data.0.url}}" target="_blank">
+                                                    <img src="{{item.attachments.data.0.media.image.src}}">
+                                                    <i class="video-icon"></i>
+                                                </a>
+                                            </template>
+                                            <div class="text video vertical layout">
+                                                <a href="{{item.attachments.data.0.url}}" target="_blank" class="title">{{item.attachments.data.0.title}}</a>
+                                                <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description)}}"></p>
+                                            </div>
+                                        </div>
+
                                     </template>
                                 </template>
-                            
-                                
+
+                                <!-- LINK -->
+                                <template is="dom-if" if="{{_isType(item.type, 'link')}}">
+                                    <div class="link-post">
+                                        <template is="dom-if" if="{{item.attachments.data}}">
+                                            <template is="dom-if" if="{{item.attachments.data.0.media}}">
+                                                <img class="photo" src="{{item.attachments.data.0.media.image.src}}">
+                                            </template>
+                                            <template is="dom-if" if="{{item.attachments.data.0.subattachments}}">
+                                                <img class="photo" src="{{item.attachments.data.0.subattachments.data.0.media.image.src}}">
+                                            </template>
+                                            <div class="text vertical layout">
+                                                <template is="dom-if" if="{{item.attachments.data.0.title}}">
+                                                    <a href="{{item.attachments.data.0.url}}" target="_blank" class="title">{{item.attachments.data.0.title}}</a>
+                                                </template>
+                                                <template is="dom-if" if="{{item.attachments.data.0.description}}">
+                                                    <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description)}}"></p>
+                                                </template>
+                                            </div>
+                                        </template>
+                                    </div>
+                                </template>
                             </div>
 
                             <!-- Likes, comments and shares -->
@@ -309,12 +171,13 @@
                 locale: {
                     type: String,
                     computed: "_getLocate(language)",
-                     
+
                 },
                 access_token: {
                     type: String,
                     value: "",
-                    refrectToAttribute: true
+                    refrectToAttribute: true,
+                    observer: '_checkAccessToken'
                 },
                 refreshTime: {
                     type: Number,
@@ -328,45 +191,37 @@
                     }
                 }
             },
-						// Enable auto refresh
+            // Enable auto refresh
             attached: function () {
                 setInterval(function () {
                     this.refresh();
                 }.bind(this), this.refreshTime)
             },
-						// refresh data
+            // refresh data
             refresh: function () {
                 this.$.requestData.generateRequest();
             },
 
             /* Change language of momentJS */
             _languageUpdate: function (newValue) {
-							moment.locale(newValue);
-							this.refresh()
+                moment.locale(newValue);
+                this.refresh();
             },
-            _getLocate: function(language){
-                if (language == "es"){
+            _getLocate: function (language) {
+                if (language == "es") {
                     return "es_es";
                 } else {
                     return "en_US";
                 }
             },
-						// Reload data when access token change
+            // Reload data when access token change
             _checkAccessToken: function (newValue) {
                 if (newValue) {
                     this.$.requestData.generateRequest();
                 }
             },
-            /* Check if an post  has story based on the bool*/
-            _checkElement: function (element, bool) {
-                // XNOR comparation for booleans
-                return element.linked && ((element.linked.story && bool == 'true') || (!element.linked.story && bool == 'false'));
-            },
-						// If its a page and the post is inside the other one --> new style
-            _getPageStyle: function (item) {
-                return item ? "pageStyle" : "";
-            },
-						
+
+
             _getUsernameUrl: function (item) {
                 var url;
                 if (item.linked && !item.linked.from.category) {
@@ -380,41 +235,10 @@
                 return url
             },
 
-            _getYoutubeVideo: function (url) {
-                return url.replace(/\?[=A-z0-9]*/, "");
-            },
             _getAuthorPostStory: function (item) {
                 var author = item.linked ? item.linked.from.name : item.from.name;
 
                 return item.linked && item.linked.story ? item.linked.story.replace(author, "") : "";
-            },
-            _getShareImg: function (item) {
-                var fullUrl = item.picture || item.linked.picture;
-                var pattern = "url" + "=([^&]*)";
-                var exp = new RegExp(pattern);
-                var result = exp.exec(fullUrl)
-                var url = result && result.length > 1 ? result[1] : ""
-                var id;
-                url = url.replace(/%2F/g, "/");
-                url = url.replace(/%3A/g, ":");
-                url = url.replace(/%3F/g, "?");
-                url = url.replace(/%3D/g, "=");
-                url = url.replace(/%26/g, "&");
-                if (url.indexOf('fbstaging') > -1) {
-                    url = fullUrl.replace(/w=[^&]*/, 'w=500')
-                    url = url.replace(/h=[^&]*/, 'h=500')
-                }
-                if (url.indexOf("www.facebook.com") > -1) {
-                    url += "&access_token=" + this.access_token;
-                }
-                if (item.linked && item.linked.id && item.linked.status_type === 'added_photos') {
-                    id = item.linked.id.split('_')[1];
-                    url = 'https://graph.facebook.com/' + id + '/picture?access_token=' + this.access_token;
-                } else if (item.id && item.status_type === 'added_photos') {
-                    id = item.id.split('_')[1];
-                    url = 'https://graph.facebook.com/' + id + '/picture?access_token=' + this.access_token;
-                }
-                return url;
             },
             _noExist: function (item) {
                 return !item;
@@ -424,12 +248,12 @@
                 return (item.linked && item.linked.shares) ? true : false;
             },
             _getShareInformation: function (item) {
-                if (item.story && item.story_tags ) {
-                    var full_story =item.story;
-                    item.story_tags.forEach(function(tag) {
+                if (item.story && item.story_tags) {
+                    var full_story = item.story;
+                    item.story_tags.forEach(function (tag) {
                         full_story = full_story.replace(tag.name, this._parserUser(tag));
                     }, this);
-                    
+
                     return full_story;
                 }
                 return '';
@@ -446,29 +270,6 @@
             },
             _isType: function (item, type, type2) {
                 return item === type || item === type2;
-            },
-            _isNoType: function (item, type) {
-                return item !== type;
-            },
-            _getFullPhoto: function (item) {
-                if (item.linked && item.linked.object_id) {
-                    return "https://graph.facebook.com/" + item.linked.object_id + "/picture?access_token=" + this.access_token;
-                } else {
-                    console.log('error con alguna mierda en getFullFoto', item);
-                }
-            },
-
-            _getWith: function (item) {
-                var html = "";
-                if (item && item.with_tags && item.with_tags.data.length > 0) {
-                    html += "-" + this.data.with + " " + this._parserUser(item.with_tags.data[0]) + " ";
-                    if (item.with_tags.data.length > 1) {
-                        var size = item.with_tags.data.length - 1;
-                        html += this.data.and + " " + size + " ";
-                        html += item.with_tags.data.length > 2 ? this.data.others : this.data.other
-                    }
-                }
-                return html;
             },
 
             // Private functions
@@ -490,27 +291,7 @@
                 this.access_token = "";
                 this.$.requestMock.generateRequest();
             },
-            _refreshResponse: function (event, detail) {
-                var firstId = this.events[0].id;
-                var newEvents = detail.response.home.data;
-                var finded = false;
-                var i = 0;
-                var realNew = [];
-                for (i; i < newEvents.length && !finded; i++) {
-                    if (newEvents[i].id == firstId) {
-                        finded = true;
-                    }
-                }
-                if (--i) {
-                    realNew = newEvents.slice(0, i);
-                    realNew = this._reparseRefresh(realNew);
-                    for (var j = 0; j < realNew.length; j++) {
-                        //this.events.unshift(realNew[j]);
-                        this.unshift('events', realNew[j]);
-                    }
-                }
-            },
-            getTime: function(date){
+            getTime: function (date) {
                 return moment(date).fromNow();
             },
             _reparseRefresh: function (list) {
@@ -554,21 +335,21 @@
                     return '<a class="facebook-wall scope-style link" href="https://www.facebook.com/hashtag/' + tag + ' "target="_blank"><span>#' + tag + '</span></a>'
                 });
             },
-            _parseEmojis: function(text){
+            _parseEmojis: function (text) {
                 var ranges = [
                     '\ud83c[\udf00-\udfff]', // U+1F300 to U+1F3FF
                     '\ud83d[\udc00-\ude4f]', // U+1F400 to U+1F64F
                     '\ud83d[\ude80-\udeff]',
                     '❤️'  // U+1F680 to U+1F6FF
                 ];
-                var regex= new RegExp(ranges.join('|'), 'g');
-                return text.replace(regex, function(emoji){
+                var regex = new RegExp(ranges.join('|'), 'g');
+                return text.replace(regex, function (emoji) {
                     var code = emoji.codePointAt(0).toString(16)
                     return "<span class='facebook-wall scope-style emoji emoji" + code + "'></span>"
                 });
             },
-            _getLocation: function(item){
-                return item.place && item.place.location ? ' - ' + item.place.location.city + ', ' + item.place.location.country:'';
+            _getLocation: function (item) {
+                return item.place && item.place.location ? ' - ' + item.place.location.city + ', ' + item.place.location.country : '';
             },
         });
     </script>
