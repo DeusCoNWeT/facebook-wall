@@ -27,7 +27,7 @@
         height: var(--facebook-wall-height, 450px);
       }
     </style>
-    <iron-ajax id="requestData" url="https://graph.facebook.com/v2.10/me/feed?fields=name,updated_time,attachments,story_tags,place,from,icon,message,object_id,likes,source,story,type&access_token={{access_token}}&locale={{locale}}"
+    <iron-ajax id="requestData" url="https://test.centauro.ls.fi.upm.es/api/aux/facebookTimeline?&access_token={{access_token}}&locale={{locale}}"
       headers="{'Timing-Allow-origin': '*'}" method="GET" handleAs="json" on-response="_dataResponse" on-error="_loadMock">
     </iron-ajax>
     <iron-ajax id="requestMock" url="{{mockUrl}}" method="GET" handleAs="json" on-response="_dataResponse">
@@ -70,7 +70,7 @@
               <!-- Post content -->
               <div class="postContent">
                 <template is="dom-if" if="{{item.message}}">
-                  <div class="description" inner-h-t-m-l="{{_parseText(item.message)}}"></div>
+                  <div class="description" inner-h-t-m-l="{{_parseText(item.message, item)}}"></div>
                 </template>
                 <!-- PHOTOS -->
                 <template is="dom-if" if="{{_isType(item.type,  'photo')}}">
@@ -98,7 +98,7 @@
                       </template>
                       <div class="text video vertical layout">
                         <a href="{{item.attachments.data.0.url}}" target="_blank" class="title">{{item.attachments.data.0.title}}</a>
-                        <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description)}}"></p>
+                        <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description, item)}}"></p>
                       </div>
                     </div>
 
@@ -120,7 +120,7 @@
                           <a href="{{item.attachments.data.0.url}}" target="_blank" class="title">{{item.attachments.data.0.title}}</a>
                         </template>
                         <template is="dom-if" if="{{item.attachments.data.0.description}}">
-                          <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description)}}"></p>
+                          <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description, item)}}"></p>
                         </template>
                       </div>
                     </template>
@@ -226,7 +226,9 @@
       /* Change language of momentJS */
       _languageUpdate: function (newValue) {
         moment.locale(newValue);
-        this.refresh();
+        if (this.events.length > 0){
+          this.refresh();
+        }
       },
       /* Get locale from language */
       _getLocate: function (language) {
@@ -300,9 +302,9 @@
 
       
       _dataResponse: function (event, detail) {
-        if (detail.response && detail.response.data) {
-          this.set("events", detail.response.data);
-          this._next = detail.response.data.next;
+        if (detail.response) {
+          this.set("events", detail.response);
+          //this._next = detail.response.data.next;
         } else {
           this._loadMock();
         }
@@ -319,11 +321,12 @@
         var tag = "<a class='facebook-wall scope-style link bold' href='https://www.facebook.com/" + user.id + "' target='_blank'>" + user.name + "</a>";
         return tag;
       },
-      _parseText: function (text) {
+      _parseText: function (text, model) {
         if (text) {
           text = this._parseURL(text);
           text = this._parseHashtag(text);
           text = this._parseEmojis(text);
+          text = this._parseMention(text, model);
         }
         return text ? text : "";
       },
@@ -351,6 +354,16 @@
           var code = emoji.codePointAt(0).toString(16)
           return "<span class='facebook-wall scope-style emoji emoji" + code + "'></span>"
         });
+      },
+      _parseMention: function(text, model){
+        if (model.message_tags) {
+          for (var i=0;i<model.message_tags.length;i++){
+             text = text.replace(model.message_tags[i].name, function(){
+               return '<a class="facebook-wall scope-style link" href=https://facebook.com/' + model.message_tags[i].id + ' target="_blank">' + model.message_tags[i].name + '</a>'
+             })
+          }
+        }
+        return text;
       },
       _getLocation: function (item) {
         return item.place && item.place.location ? ' - ' + item.place.location.city + ', ' + item.place.location.country : '';
