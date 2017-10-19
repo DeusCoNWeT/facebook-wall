@@ -43,8 +43,14 @@
         <div>
           <paper-icon-button icon="refresh" on-click="refresh"></paper-icon-button>
         </div>
-
       </div>
+      <template is="dom-if" if="{{loading}}">
+          <paper-material elevation="2">
+            <div class="post vertical center-justified layout">
+              <img class="loading" src="https://cbschicago.files.wordpress.com/2014/09/loading.gif?w=620&h=349&crop=1">
+            </div>
+          </paper-material>
+        </template>
       <div class="content">
         <template id="body" is="dom-repeat" items="{{events}}">
           <paper-material elevation="2">
@@ -147,13 +153,7 @@
             </div>
           </paper-material>
         </template>
-        <template is="dom-if" if="{{_noExist(events.length)}}">
-          <paper-material elevation="2">
-            <div class="post vertical center-justified layout">
-              <img class="loading" src="https://cbschicago.files.wordpress.com/2014/09/loading.gif?w=620&h=349&crop=1">
-            </div>
-          </paper-material>
-        </template>
+
       </div>
     </paper-header-panel>
 
@@ -210,6 +210,11 @@
           value: function () {
             return this.resolveUrl('mockData/dump.json');
           }
+        },
+
+        loading: {
+          type: Boolean,
+          value: true
         }
       },
 
@@ -220,13 +225,16 @@
       },
       // refresh data
       refresh: function () {
+        this._lastEvents = this.events;
+        this.set('events',[]);
+        this.loading = true;
         this.$.requestData.generateRequest();
       },
 
       /* Change language of momentJS */
       _languageUpdate: function (newValue) {
         moment.locale(newValue);
-        if (this.events.length > 0){
+        if (this.events.length > 0) {
           this.refresh();
         }
       },
@@ -300,11 +308,14 @@
         return item === type || item === type2;
       },
 
-      
+
       _dataResponse: function (event, detail) {
         if (detail.response) {
+          this.loading = false;
           this.set("events", detail.response);
           //this._next = detail.response.data.next;
+        } else if (this._lastEvents){
+          this.set('events',this._lastEvents);
         } else {
           this._loadMock();
         }
@@ -355,12 +366,12 @@
           return "<span class='facebook-wall scope-style emoji emoji" + code + "'></span>"
         });
       },
-      _parseMention: function(text, model){
+      _parseMention: function (text, model) {
         if (model.message_tags) {
-          for (var i=0;i<model.message_tags.length;i++){
-             text = text.replace(model.message_tags[i].name, function(){
-               return '<a class="facebook-wall scope-style link" href=https://facebook.com/' + model.message_tags[i].id + ' target="_blank">' + model.message_tags[i].name + '</a>'
-             })
+          for (var i = 0; i < model.message_tags.length; i++) {
+            text = text.replace(model.message_tags[i].name, function () {
+              return '<a class="facebook-wall scope-style link" href=https://facebook.com/' + model.message_tags[i].id + ' target="_blank">' + model.message_tags[i].name + '</a>'
+            })
           }
         }
         return text;
