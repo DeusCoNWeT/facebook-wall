@@ -45,12 +45,12 @@
         </div>
       </div>
       <template is="dom-if" if="{{loading}}">
-          <paper-material elevation="2">
-            <div class="post vertical center-justified layout">
-              <img class="loading" src="https://cbschicago.files.wordpress.com/2014/09/loading.gif?w=620&h=349&crop=1">
-            </div>
-          </paper-material>
-        </template>
+        <paper-material elevation="2">
+          <div class="post vertical center-justified layout">
+            <img class="loading" src="https://cbschicago.files.wordpress.com/2014/09/loading.gif?w=620&h=349&crop=1">
+          </div>
+        </paper-material>
+      </template>
       <div class="content">
         <template id="body" is="dom-repeat" items="{{events}}">
           <paper-material elevation="2">
@@ -150,12 +150,6 @@
                 </template>
 
               </div>
-<<<<<<< HEAD
-            </paper-material>
-          </template>
-        </div>
-      </paper-header-panel>
-=======
             </div>
           </paper-material>
         </template>
@@ -163,7 +157,6 @@
       </div>
     </paper-header-panel>
 
->>>>>>> master
   </template>
   <script>
     Polymer({
@@ -221,7 +214,12 @@
         loading: {
           type: Boolean,
           value: true
-        }
+        },
+        latency_time: {
+          type: Number,
+          value: 5000,
+          reflectToAttribute: true
+        },
       },
 
       attached: function () {
@@ -229,10 +227,13 @@
           this.refresh();
         }.bind(this), this.refreshTime)
       },
+      sleep: function (cb) {
+        window.setTimeout(cb, this.latency_time);
+      },
       // refresh data
       refresh: function () {
         this._lastEvents = this.events;
-        this.set('events',[]);
+        this.set('events', []);
         this.loading = true;
         this.$.requestData.generateRequest();
       },
@@ -313,15 +314,16 @@
       _isType: function (item, type, type2) {
         return item === type || item === type2;
       },
-
-
       _dataResponse: function (event, detail) {
+        var that = this;
         if (detail.response) {
+          this.sleep(function () {
+            that.loading = false;
+            that.set("events", detail.response);
+          })
+        } else if (this._lastEvents) {
           this.loading = false;
-          this.set("events", detail.response);
-          //this._next = detail.response.data.next;
-        } else if (this._lastEvents){
-          this.set('events',this._lastEvents);
+          this.set('events', this._lastEvents);
         } else {
           this._loadMock();
         }
