@@ -20,14 +20,8 @@
     "paper-button": "PolymerElements/paper-button",
     "web-component-tester": "Polymer/web-component-tester#~4.2.1",
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",
-<<<<<<< HEAD
-    "finance-search": "^1.0.2-stable",
-    "search-company": "*",
-    "paper-spinner": "^1.2.1"
-=======
     "moment": "^2.18.1",
     "polymer": "1.2"
->>>>>>> master
   },
   "devDependencies": {
     "polymer-test-tools": "Polymer/polymer-test-tools#master",
