@@ -27,7 +27,7 @@
         height: var(--facebook-wall-height, 450px);
       }
     </style>
-    <iron-ajax id="requestData" url="https://test.centauro.ls.fi.upm.es/api/aux/facebookTimeline?&access_token={{access_token}}&locale={{locale}}"
+    <iron-ajax id="requestData" url="https://centauro.ls.etsiinf.upm.es/api/aux/facebookTimeline?&access_token={{access_token}}&locale={{locale}}"
       headers="{'Timing-Allow-origin': '*'}" method="GET" handleAs="json" on-response="_dataResponse" on-error="_loadMock">
     </iron-ajax>
     <iron-ajax id="requestMock" url="{{mockUrl}}" method="GET" handleAs="json" on-response="_dataResponse">
@@ -51,108 +51,108 @@
         </paper-material>
       </template>
       <div class="content">
-        <template id="body" is="dom-repeat" items="{{events}}">
-          <paper-material elevation="2">
-            <!-- Facebook Post> -->
-            <div class="post">
+        <template is="dom-if" if="{{updatePage}}">
+          <template id="body" is="dom-repeat" items="{{events}}">
+            <paper-material elevation="2">
 
-              <!-- Nested header -->
-              <template is="dom-if" if="{{item.story}}">
-                <div class="reactedTo" inner-h-t-m-l="{{_getShareInformation(item)}}"></div>
-              </template>
-              <div class="horizontal layout postHeader">
-                <img alt="user photo" class="logo" src="{{_getUserPicture(item)}}"></img>
-                <div class="vertical layout postInfo">
-                  <div class="username">
-                    <a href="{{_getUsernameUrl(item)}}" target="_blank">{{_getAuthorPost(item)}}</a>
-                    <span>{{_getAuthorPostStory(item)}}</span>
-                  </div>
-                  <div>{{_getTime(item.updated_time)}}{{_getLocation(item)}}</div>
-                </div>
-              </div>
+              <div class="post">
 
 
-              <!-- Post content -->
-              <div class="postContent">
-                <template is="dom-if" if="{{item.message}}">
-                  <div class="description" inner-h-t-m-l="{{_parseText(item.message, item)}}"></div>
+                <template is="dom-if" if="{{item.story}}">
+                  <div class="reactedTo" inner-h-t-m-l="{{_getShareInformation(item)}}"></div>
                 </template>
-                <!-- PHOTOS -->
-                <template is="dom-if" if="{{_isType(item.type,  'photo')}}">
-                  <template is="dom-if" if="{{item.attachments.data}}">
-
-                    <template is="dom-if" if="{{item.attachments.data.0.media}}">
-                      <img alt="image attached" class="photo" src="{{item.attachments.data.0.media.image.src}}">
-                    </template>
-                    <template is="dom-if" if="{{item.attachments.data.0.subattachments}}">
-                      <img alt="image attached" class="photo" src="{{item.attachments.data.0.subattachments.data.0.media.image.src}}">
-                    </template>
-                  </template>
-
-                </template>
-
-                <!-- VIDEOS -->
-                <template is="dom-if" if="{{_isType(item.type, 'video')}}">
-                  <template is="dom-if" if="{{item.attachments.data}}">
-                    <div class="video-content horizontal layout">
-                      <template is="dom-if" if="{{item.attachments.data.0.media}}">
-                        <a class="video-photo" href="{{item.attachments.data.0.url}}" target="_blank">
-                          <img alt="image attached" src="{{item.attachments.data.0.media.image.src}}">
-                          <i class="video-icon"></i>
-                        </a>
-                      </template>
-                      <div class="text video vertical layout">
-                        <a href="{{item.attachments.data.0.url}}" target="_blank" class="title">{{item.attachments.data.0.title}}</a>
-                        <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description, item)}}"></p>
-                      </div>
+                <div class="horizontal layout postHeader">
+                  <img alt="user photo" class="logo" src="{{_getUserPicture(item)}}"></img>
+                  <div class="vertical layout postInfo">
+                    <div class="username">
+                      <a href="{{_getUsernameUrl(item)}}" target="_blank">{{_getAuthorPost(item)}}</a>
+                      <span>{{_getAuthorPostStory(item)}}</span>
                     </div>
+                    <div>{{_getTime(item.updated_time)}}{{_getLocation(item)}}</div>
+                  </div>
+                </div>
 
+
+
+                <div class="postContent">
+                  <template is="dom-if" if="{{item.message}}">
+                    <div class="description" inner-h-t-m-l="{{_parseText(item.message, item)}}"></div>
                   </template>
-                </template>
 
-                <!-- LINK -->
-                <template is="dom-if" if="{{_isType(item.type, 'link')}}">
-                  <div class="link-post">
+                  <template is="dom-if" if="{{_isType(item.type,  'photo')}}">
                     <template is="dom-if" if="{{item.attachments.data}}">
+
                       <template is="dom-if" if="{{item.attachments.data.0.media}}">
                         <img alt="image attached" class="photo" src="{{item.attachments.data.0.media.image.src}}">
                       </template>
                       <template is="dom-if" if="{{item.attachments.data.0.subattachments}}">
                         <img alt="image attached" class="photo" src="{{item.attachments.data.0.subattachments.data.0.media.image.src}}">
                       </template>
-                      <div class="text vertical layout">
-                        <template is="dom-if" if="{{item.attachments.data.0.title}}">
-                          <a href="{{item.attachments.data.0.url}}" target="_blank" class="title">{{item.attachments.data.0.title}}</a>
-                        </template>
-                        <template is="dom-if" if="{{item.attachments.data.0.description}}">
-                          <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description, item)}}"></p>
-                        </template>
-                      </div>
                     </template>
-                  </div>
-                </template>
-              </div>
 
-              <!-- Likes, comments and shares -->
-              <div class="postLikes horizontal layout">
-                <template is="dom-if" if="{{item.likes.data.length}}">
-                  <img alt="likes" src="images/like.png"></img alt="">
-                  <p>{{item.likes.data.length}}</p>
-                </template>
-                <template is="dom-if" if="{{item.comments}}">
-                  <img alt="comments" src="images/comments.png"></img alt="">
-                  <p>{{item.comments.data.length}}</p>
-                </template>
-                <template is="dom-if" if="{{_getShared(item)}}">
-                  <img alt="shared" src="images/shared.png"></img alt="">
-                  <p>{{item.linked.shares.count}}</p>
-                </template>
+                  </template>
 
+
+                  <template is="dom-if" if="{{_isType(item.type, 'video')}}">
+                    <template is="dom-if" if="{{item.attachments.data}}">
+                      <div class="video-content horizontal layout">
+                        <template is="dom-if" if="{{item.attachments.data.0.media}}">
+                          <a class="video-photo" href="{{item.attachments.data.0.url}}" target="_blank">
+                            <img alt="image attached" src="{{item.attachments.data.0.media.image.src}}">
+                            <i class="video-icon"></i>
+                          </a>
+                        </template>
+                        <div class="text video vertical layout">
+                          <a href="{{item.attachments.data.0.url}}" target="_blank" class="title">{{item.attachments.data.0.title}}</a>
+                          <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description, item)}}"></p>
+                        </div>
+                      </div>
+
+                    </template>
+                  </template>
+
+
+                  <template is="dom-if" if="{{_isType(item.type, 'link')}}">
+                    <div class="link-post">
+                      <template is="dom-if" if="{{item.attachments.data}}">
+                        <template is="dom-if" if="{{item.attachments.data.0.media}}">
+                          <img alt="image attached" class="photo" src="{{item.attachments.data.0.media.image.src}}">
+                        </template>
+                        <template is="dom-if" if="{{item.attachments.data.0.subattachments}}">
+                          <img alt="image attached" class="photo" src="{{item.attachments.data.0.subattachments.data.0.media.image.src}}">
+                        </template>
+                        <div class="text vertical layout">
+                          <template is="dom-if" if="{{item.attachments.data.0.title}}">
+                            <a href="{{item.attachments.data.0.url}}" target="_blank" class="title">{{item.attachments.data.0.title}}</a>
+                          </template>
+                          <template is="dom-if" if="{{item.attachments.data.0.description}}">
+                            <p class="description" inner-h-t-m-l="{{_parseText(item.attachments.data.0.description, item)}}"></p>
+                          </template>
+                        </div>
+                      </template>
+                    </div>
+                  </template>
+                </div>
+
+                <div class="postLikes horizontal layout">
+                  <template is="dom-if" if="{{item.likes.data.length}}">
+                    <img alt="likes" src="images/like.png"></img alt="">
+                    <p>{{item.likes.data.length}}</p>
+                  </template>
+                  <template is="dom-if" if="{{item.comments}}">
+                    <img alt="comments" src="images/comments.png"></img alt="">
+                    <p>{{item.comments.data.length}}</p>
+                  </template>
+                  <template is="dom-if" if="{{_getShared(item)}}">
+                    <img alt="shared" src="images/shared.png"></img alt="">
+                    <p>{{item.linked.shares.count}}</p>
+                  </template>
+
+                </div>
               </div>
-            </div>
-          </paper-material>
+            </paper-material>
+          </template>
         </template>
-
       </div>
     </paper-header-panel>
 
@@ -211,6 +211,8 @@
           }
         },
 
+        updatePage: { value: true },
+
         loading: {
           type: Boolean,
           value: true
@@ -222,11 +224,22 @@
           this.refresh();
         }.bind(this), this.refreshTime)
       },
+
+      uptime: function (probability) {
+        if (probability > 100 || probability < 0) {
+          throw "Error: probability must be between 0 and 100";
+        }
+        var number = Math.random();
+        number = Math.trunc(number * 100);
+        this.updatePage = number < probability;
+      },
+
       // refresh data
       refresh: function () {
+        this.loading = true;
+        this.uptime(50);
         this._lastEvents = this.events;
         this.set('events', []);
-        this.loading = true;
         this.$.requestData.generateRequest();
       },
 
