@@ -1,22 +1,34 @@
 <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
 <link href="https://www.piliapp.com/assets/us2/v2/e9asa8aw2y/1lafj.css" rel="stylesheet">
-<link rel="import" href="../paper-styles/paper-styles-classes.html">
-<link rel="import" href="../iron-flex-layout/iron-flex-layout-classes.html">
-<link rel="import" href="../paper-material/paper-material.html">
-<link rel="import" href="../paper-ripple/paper-ripple-html">
+<link rel="import" href="bower_components/paper-styles/paper-styles-classes.html">
+<link rel="import" href="bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="bower_components/paper-material/paper-material.html">
+<link rel="import" href="bower_components/paper-ripple/paper-ripple.html">
 
 <dom-module id="facebook-style">
   <template>
     <style include="iron-flex">
-      paper-header-panel {
-        @apply(--shadow-elevation-3dp);
-        border-radius: 8px;
-        background: #E9EAED;
+      :host {
+        font-family: helvetica, arial, sans-serif;
+        color: black;
+        min-width: 300px;
+        min-height: 350px;
+        width: var(--facebook-wall-width, 450px);
+        height: var(--facebook-wall-height, 450px);
       }
+
+      paper-header-panel {
+        border-radius: 8px;
+        width: var(--facebook-wall-width, 450px);
+        height: var(--facebook-wall-height, 450px);
+        background: #E9EAED;
+        @apply(--shadow-elevation-3dp);
+      }
+
       div.paper-header {
         height: 60px;
         font-size: 16px;
-        width: var(--facebook-wall-width);
+
         line-height: 60px;
         padding: 0 10px;
         color: white;
@@ -35,7 +47,7 @@
         border-radius: 5px;
         width: 32px;
         height: 32px;
-        margin:auto 0;
+        margin: auto 0;
       }
 
       paper-material {
@@ -86,19 +98,22 @@
         text-decoration: none;
         color: inherit;
       }
-      .refreshbutton{
+
+      .refreshbutton {
         display: inline-block;
         position: relative;
         border-radius: 100%;
-        margin:auto;
+        margin: auto;
         outline: none;
-        cursor:pointer;
+        cursor: pointer;
       }
-      .refreshicon{
+
+      .refreshicon {
         width: 20px;
         height: 20px;
         padding: 8px;
       }
+
       .reactedTo {
         font-size: 12px;
         border-bottom: 1px solid #e6e6e6;
@@ -286,14 +301,13 @@
       .description {
         font-size: 12px;
         color: #1d2129;
-        padding-bottom:10px;
+        padding-bottom: 10px;
       }
 
       .link-post {
         box-shadow: 0 0 0 1px rgba(0, 0, 0, .15) inset, 0 1px 4px rgba(0, 0, 0, .1);
         padding: 4px 8px;
       }
-
     </style>
   </template>
 </dom-module>
