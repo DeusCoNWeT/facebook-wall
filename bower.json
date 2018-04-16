@@ -11,17 +11,17 @@
   "main": "facebook-wall.html",
   "dependencies": {
     "iron-ajax": "PolymerElements/iron-ajax",
-    "paper-header-panel": "PolymerElements/paper-header-panel",
+    "paper-header-panel": "PolymerElements/paper-header-panel#1.1.7",
     "paper-styles": "PolymerElements/paper-styles",
     "iron-icon": "PolymerElements/iron-icon",
     "iron-icons": "PolymerElements/iron-icons",
     "paper-icon-button": "PolymerElements/paper-icon-button",
-    "paper-material": "PolymerElements/paper-material",
+    "paper-material": "PolymerElements/paper-material#1.0.7",
     "paper-button": "PolymerElements/paper-button",
     "web-component-tester": "Polymer/web-component-tester#~4.2.1",
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "moment": "^2.18.1",
-    "polymer": "1.2"
+    "polymer": "1.2.4"
   },
   "devDependencies": {
     "polymer-test-tools": "Polymer/polymer-test-tools#master",
