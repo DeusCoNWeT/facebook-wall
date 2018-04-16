@@ -21,7 +21,8 @@
     "web-component-tester": "Polymer/web-component-tester#~4.2.1",
     "test-fixture": "PolymerElements/test-fixture#^1.0.0",
     "moment": "^2.18.1",
-    "polymer": "1.2"
+    "polymer": "1.2",
+    "paper-ripple": "PolymerElements/paper-ripple#1.0.7"
   },
   "devDependencies": {
     "polymer-test-tools": "Polymer/polymer-test-tools#master",

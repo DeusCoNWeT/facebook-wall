@@ -62,10 +62,10 @@
                   <div class="reactedTo" inner-h-t-m-l="{{_getShareInformation(item)}}"></div>
                 </template>
                 <div class="horizontal layout postHeader">
-                  <img alt="user photo" class="logo" src="{{_getUserPicture(item)}}"></img>
+                  <img alt="user photo" class="logo" src="{{}}"></img>
                   <div class="vertical layout postInfo">
                     <div class="username">
-                      <a href="{{_getUsernameUrl(item)}}" target="_blank">{{_getAuthorPost(item)}}</a>
+                      <a href="{{_getUsernameUrl(item)}}" target="_blank">{{}}</a>
                       <span>{{_getAuthorPostStory(item)}}</span>
                     </div>
                     <div>{{_getTime(item.updated_time)}}{{_getLocation(item)}}</div>
@@ -237,7 +237,7 @@
       // refresh data
       refresh: function () {
         this.loading = true;
-        this.uptime(50);
+        this.uptime(100);
         this._lastEvents = this.events;
         this.set('events', []);
         this.$.requestData.generateRequest();
